@@ -1,4 +1,6 @@
 # Deployment
+Prerequisites
+This repo assumes you have terraform installed and configured in directory ~/terraform/ and you have cloned the repo to ~/Github/tasky/ 
 A deployment script is provided.  
 Clone this repo then 
 ./deploy-tasky 
