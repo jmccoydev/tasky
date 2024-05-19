@@ -1,11 +1,10 @@
 # To deploy the thing we need to:
 
-# Set the environment becase we are a complete and utter hack.  It's awful but quick.
-
 # Build the container and push to the repo
 docker build --no-cache -t jmccoydev/tasky:latest .
 docker push jmccoydev/tasky:latest
 
+# Set the environment becase we are a complete and utter hack.  It's awful but quick.
 cd ~/terraform ; pwd ; terraform init ; export DB_PRIVATE_IP=`terraform show | grep "db_private_ip" | sed -n 's/.*db_private_ip = "\(.*\)"/\1/p'` ; export DB_PUBLIC_IP=`terraform show | grep "db_public_ip" | sed -n 's/.*db_public_ip = "\(.*\)"/\1/p'` ; export CLUSTER_NAME=`terraform show | sed -n '/cluster_name.*"wiz/{s/.*= "\([^"]*\)"/\1/; p; q;}'`
 
 # Set the kubernetes context
