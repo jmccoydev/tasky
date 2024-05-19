@@ -1,0 +1,21 @@
+# To deploy the thing we need to:
+
+# Set the environment becase we are a complete and utter hack.  It's awful but quick.
+
+cd ~/terraform ; pwd ; terraform init ; export DB_PRIVATE_IP=`terraform show | grep "db_private_ip" | sed -n 's/.*db_private_ip = "\(.*\)"/\1/p'` ; export DB_PUBLIC_IP=`terraform show | grep "db_public_ip" | sed -n 's/.*db_public_ip = "\(.*\)"/\1/p'` ; export CLUSTER_NAME=`terraform show | sed -n '/cluster_name.*"wiz/{s/.*= "\([^"]*\)"/\1/; p; q;}'`
+
+# Set the kubernetes context
+aws eks --region us-east-2 update-kubeconfig --name $CLUSTER_NAME
+echo "~~~~~~~~"
+echo "you are now talking to EKS cluser "$CLUSTER_NAME
+ 
+# Set the db connect string in the yaml
+cd ~/Github/tasky
+sed -i "s/\(mongodb:\/\/admin:adminPassword@\)[^:]*\(:27017\/\"\)/\1$DB_PRIVATE_IP\2/" tasky-deployment.yaml
+echo "~~~~~~~~"
+echo "mongodb connect string updated with internal IP address "$DB_PRIVATE_IP
+echo "~~~~~~~~"
+echo "Public IP address of the MongoDB server "$DB_PUBLIC_IP
+
+# Deploy the thing and it's load balancer
+kubectl apply -f tasky-deployment.yaml
