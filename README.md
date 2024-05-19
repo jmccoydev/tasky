@@ -1,3 +1,8 @@
+# Deployment
+A deployment script is provided.  
+Clone this repo then 
+./deploy-tasky 
+
 # Docker
 A Dockerfile has been provided to run this application.  The default port exposed is 8080.
 
