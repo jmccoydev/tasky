@@ -5,7 +5,7 @@ docker build --no-cache -t jmccoydev/tasky:latest .
 docker push jmccoydev/tasky:latest
 
 # Set the environment becase we are a complete and utter hack.  It's awful but quick.
-cd ~/terraform ; pwd ; terraform init ; export DB_PRIVATE_IP=`terraform show | grep "db_private_ip" | sed -n 's/.*db_private_ip = "\(.*\)"/\1/p'` ; export DB_PUBLIC_IP=`terraform show | grep "db_public_ip" | sed -n 's/.*db_public_ip = "\(.*\)"/\1/p'` ; export CLUSTER_NAME=`terraform show | sed -n '/cluster_name.*"wiz/{s/.*= "\([^"]*\)"/\1/; p; q;}'`
+cd ~/terraform ; pwd ; terraform init ; export DB_PRIVATE_IP=`terraform output -raw db_private_ip` ; export DB_PUBLIC_IP=`terraform output -raw db_public_ip` ; export CLUSTER_NAME=`terraform output -raw cluster_name`
 
 # Set the kubernetes context
 aws eks --region us-east-2 update-kubeconfig --name $CLUSTER_NAME
@@ -21,4 +21,4 @@ echo "~~~~~~~~"
 echo "Public IP address of the MongoDB server "$DB_PUBLIC_IP
 
 # Deploy the thing and it's load balancer
-kubectl apply -f tasky-deployment.yaml
+#kubectl apply -f tasky-deployment.yaml
