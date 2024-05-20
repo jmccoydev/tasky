@@ -21,4 +21,4 @@ echo "~~~~~~~~"
 echo "Public IP address of the MongoDB server "$DB_PUBLIC_IP
 
 # Deploy the thing and it's load balancer
-#kubectl apply -f tasky-deployment.yaml
+kubectl apply -f tasky-deployment.yaml
