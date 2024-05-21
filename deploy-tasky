@@ -19,8 +19,9 @@ echo "~~~~~~~~"
 echo "mongodb connect string updated with internal IP address "$DB_PRIVATE_IP
 echo "~~~~~~~~"
 echo "Public IP address of the MongoDB server "$DB_PUBLIC_IP
-
+echo "~~~~~~~~"
 # Deploy the thing and it's load balancer
+echo "Deploy the thing and it's load balancer and cluster role binding"
 kubectl apply -f tasky-deployment.yaml
 sleep 5
 echo "~~~~~~~~"
