@@ -1,0 +1,4 @@
+# To undeploy the thing we need to:
+
+kubectl delete -f tasky-deployment.yaml
+aws s3 rm s3://jmccoydev-database-backup --recursive

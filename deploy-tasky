@@ -40,5 +40,6 @@ kubectl get serviceaccounts
 echo "~~~~~~~~"
 echo "Wizexercise.txt file from the running container"
 echo "~~~~~~~~"
+echo "kubectl exec $POD -c tasky -- cat /tmp/wizexercise.txt"
 kubectl exec $POD -c tasky -- cat /tmp/wizexercise.txt
 echo "~~~~~~~~"
