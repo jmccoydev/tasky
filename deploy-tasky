@@ -5,11 +5,7 @@ docker build --no-cache -t jmccoydev/tasky:latest .
 docker push jmccoydev/tasky:latest
 
 # Set the environment becase we are a complete and utter hack.  It's awful but quick.
-cd ~/terraform
-terraform init
-export DB_PRIVATE_IP=`terraform output -raw db_private_ip`
-export DB_PUBLIC_IP=`terraform output -raw db_public_ip`
-export CLUSTER_NAME=`terraform output -raw cluster_name`
+cd ~/terraform ; terraform init ; export DB_PRIVATE_IP=`terraform output -raw db_private_ip` ; export DB_PUBLIC_IP=`terraform output -raw db_public_ip` ; export CLUSTER_NAME=`terraform output -raw cluster_name`
 
 # Set the kubernetes context
 aws eks --region us-east-2 update-kubeconfig --name $CLUSTER_NAME
@@ -26,3 +22,22 @@ echo "Public IP address of the MongoDB server "$DB_PUBLIC_IP
 
 # Deploy the thing and it's load balancer
 kubectl apply -f tasky-deployment.yaml
+sleep 5
+echo "~~~~~~~~"
+echo "Checking to see if pods are running..."
+kubectl get pods
+export POD=`kubectl get pods | grep tasky -m 1 | awk '{print $1}'` 
+echo "~~~~~~~~"
+echo "Check the service for the ingress point..."
+kubectl get services | grep Load
+echo "~~~~~~~~"
+echo "This is the required cluster admin role binding"
+kubectl describe clusterrolebinding wiz-cluster-admin-binding
+echo "~~~~~~~~"
+echo "Service account name for the cluster-admin role binding"
+kubectl get serviceaccounts
+echo "~~~~~~~~"
+echo "Wizexercise.txt file from the running container"
+echo "~~~~~~~~"
+kubectl exec $POD -c tasky -- cat /tmp/wizexercise.txt
+echo "~~~~~~~~"
